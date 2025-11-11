@@ -1,32 +1,39 @@
 package com.loja.grasp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*
- * PADRAO GRASP APLICADO: Controller
- * 
+ * PADRAO GRASP APLICADO: Creator
  * Qual padrao foi utilizado?
- * Controller
- * 
+ * Creator
  * Em qual classe/metodo foi aplicado?
- * Classe CarrinhoController
- * Metodos adicionarProdutoAoCarrinho() e verTotalDoCarrinho()
- * 
+ * Classe CarrinhoDeCompras
+ * Metodo adicionarItem()
  * Por que essa escolha atende ao principio GRASP?
- * A classe atua como intermediaria entre a interface do usuario e a logica de negocio,
- * delegando as requisicoes para os objetos corretos. Isso promove baixo acoplamento
- * pois a interface nao precisa conhecer detalhes internos do CarrinhoDeCompras.
+ * A classe CarrinhoDeCompras contem e agrega objetos da classe Item.
+ * Ela possui os dados necessarios (produto e quantidade) para criar um Item.
+ * Segundo o principio Creator, a classe que contem ou agrega objetos deve
+ * ser responsavel por cria-los, mantendo alta coesao e baixo acoplamento.
  */
-public class CarrinhoController {
-    private CarrinhoDeCompras carrinho;
+public class CarrinhoDeCompras {
+    private List<Item> itens = new ArrayList<>();
 
-    public CarrinhoController() {
-        this.carrinho = new CarrinhoDeCompras();
+    public void adicionarItem(Produto produto, int quantidade) {
+        Item novoItem = new Item(produto, quantidade);
+        this.itens.add(novoItem);
+        System.out.println("Produto adicionado ao carrinho.");
     }
 
-    public void adicionarProdutoAoCarrinho(Produto produto, int quantidade) {
-        carrinho.adicionarItem(produto, quantidade);
+    public double calcularTotal() {
+        double total = 0.0;
+        for (Item item : itens) {
+            total += item.getSubtotal();
+        }
+        return total;
     }
 
-    public double verTotalDoCarrinho() {
-        return carrinho.calcularTotal();
+    public List<Item> getItens() {
+        return itens;
     }
 }
